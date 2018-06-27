@@ -60,6 +60,19 @@ holder.partySizeTextView.setText(String.valueOf(partySize));
         // TODO (4) Update the getItemCount to return the getCount of mCursor
         return mCursor.getCount();
     }
+//recheck cursor content using this function.
+
+    public void swapCursor(Cursor newCursor) {
+
+        if (mCursor != null) mCursor.close();
+
+        mCursor = newCursor;
+
+        if (newCursor != null) {
+
+            this.notifyDataSetChanged();
+        }
+    }
 
 
     /**
