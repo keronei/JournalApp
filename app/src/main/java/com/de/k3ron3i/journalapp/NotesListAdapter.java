@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.de.k3ron3i.journalapp.DbHelper.Definitions;
 
@@ -41,18 +42,19 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Gues
         // TODO (5) Move the cursor to the passed in position, return if moveToPosition returns false
 
 if(!(mCursor.moveToPosition(position)))
+   // Toast.makeText(mContext, "Cursor is probably null", Toast.LENGTH_SHORT).show();
     return;
 
         // TODO (6) Call getString on the cursor to get the guest's name
 
-        String GuestName = mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT));
+        String Notecontent = mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT));
         // TODO (7) Call getInt on the cursor to get the party size
-int partySize = mCursor.getInt(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_HEAD));
+//int partySize = mCursor.getInt(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_HEAD));
         // TODO (8) Set the holder's nameTextView text to the guest's name
-holder.nameTextView.setText(GuestName);
+holder.foundnote.setText(Notecontent);
 
         // TODO (9) Set the holder's partySizeTextView text to the party size
-holder.partySizeTextView.setText(String.valueOf(partySize));
+holder.partySizeTextView.setText("23");
     }
 
     @Override
@@ -81,7 +83,7 @@ holder.partySizeTextView.setText(String.valueOf(partySize));
     class GuestViewHolder extends RecyclerView.ViewHolder {
 
         // Will display the guest name
-        TextView nameTextView;
+        TextView foundnote;
         // Will display the party size number
         TextView partySizeTextView;
 
@@ -94,9 +96,11 @@ holder.partySizeTextView.setText(String.valueOf(partySize));
          */
         public GuestViewHolder(View itemView) {
             super(itemView);
-            nameTextView = (TextView) itemView.findViewById(R.id.name_text_view);
+            foundnote = (TextView) itemView.findViewById(R.id.note_content);
             partySizeTextView = (TextView) itemView.findViewById(R.id.party_size_text_view);
         }
 
     }
+
+
 }

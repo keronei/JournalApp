@@ -11,7 +11,8 @@
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -22,23 +23,35 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <ImageButton
+        android:paddingTop="50dp"
+        android:id="@+id/add_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentStart="true"
+
+        android:contentDescription="@string/create_new_note"
+
+        android:src="@drawable/chevron" />
+
 
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/all_notes_list_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/add_note" />
 
-<FrameLayout
-android:id="@+id/fragment_container"
-android:layout_height="wrap_content"
-android:layout_width="wrap_content"/>
+    </LinearLayout>
+
 
 
 </android.support.design.widget.CoordinatorLayout>

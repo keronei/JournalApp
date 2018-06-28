@@ -23,10 +23,11 @@ public class NotesDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        //TODO implement date on the database for the purpose of reference
         // Create a table to hold waitlist data
         final String SQL_CREATE_NOTESLIST_TABLE = "CREATE TABLE " + Definitions.NoteslistEntry.TABLE_NAME + " (" +
                 Definitions.NoteslistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                Definitions.NoteslistEntry.COLUMN_NOTE_HEAD + " TEXT NOT NULL, " +
+
                 Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT + " TEXT NOT NULL, " +
                 Definitions.NoteslistEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 "); ";
