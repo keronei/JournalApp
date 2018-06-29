@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:layout_height="35dp"
+android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:orientation="horizontal"
+    android:weightSum="1.5"
+    >
+
+
 
     <TextView
-        android:id="@+id/party_size_text_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-
-        android:fontFamily="sans-serif"
-        android:gravity="center"
-        android:textColor="@color/textColor"
-        android:textSize="16sp"
-        android:text="@string/head"/>
-
-    <TextView
+        android:gravity="left"
         android:id="@+id/note_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/textColor"
         android:fontFamily="lobster_regular"
-        android:textSize="16sp"
+        android:textSize="12sp"
+
         android:text="@string/notes_content"/>
+
+    <TextView
+       android:layout_gravity="end"
+        android:id="@+id/last_edit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginEnd="5dp"
+        android:layout_weight="1.5"
+        android:textColor="@color/textColor"
+        android:fontFamily="lobster_regular"
+        android:textSize="13sp"
+        android:text="@string/last_edited"/>
 
 
 </LinearLayout>

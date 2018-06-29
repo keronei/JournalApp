@@ -27,7 +27,7 @@ public class NotesDbHelper extends SQLiteOpenHelper {
         // Create a table to hold waitlist data
         final String SQL_CREATE_NOTESLIST_TABLE = "CREATE TABLE " + Definitions.NoteslistEntry.TABLE_NAME + " (" +
                 Definitions.NoteslistEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-
+              Definitions.NoteslistEntry.COLUMN_NOTE_EDIT_DATE + " TEXT NOT NULL, "+
                 Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT + " TEXT NOT NULL, " +
                 Definitions.NoteslistEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 "); ";

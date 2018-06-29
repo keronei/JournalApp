@@ -2,65 +2,55 @@ package com.de.k3ron3i.journalapp.Fragments;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DateFormat;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.de.k3ron3i.journalapp.DbHelper.NotesDbHelper;
-import com.de.k3ron3i.journalapp.MainActivity;
 import com.de.k3ron3i.journalapp.DbHelper.Definitions;
+import com.de.k3ron3i.journalapp.DbHelper.NotesDbHelper;
 import com.de.k3ron3i.journalapp.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AddNoteFragment.OnFragmentInteractionListener} interface
+ * {@link DetailFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AddNoteFragment#newInstance} factory method to
+ * Use the {@link DetailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddNoteFragment extends Fragment {
-    View view;
-    // TODO: Rename parameter arguments, choose names that match
+public class DetailFragment extends Fragment {
+    //  Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+    //  Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     SQLiteDatabase notesDb;
 
+    String Notetoedit;
 
-    ImageButton addnewNote;
+    int id_of_note;
 
-    EditText notes;
 
+    EditText editor_to_update;
     private OnFragmentInteractionListener mListener;
 
-    public AddNoteFragment() {
+    public DetailFragment() {
         // Required empty public constructor
-    }
-
-    @Override
-    public void onAttachFragment(Fragment childFragment) {
-        super.onAttachFragment(childFragment);
-
     }
 
     /**
@@ -69,11 +59,11 @@ public class AddNoteFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AddNoteFragment.
+     * @return A new instance of fragment DetailFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static AddNoteFragment newInstance(String param1, String param2) {
-        AddNoteFragment fragment = new AddNoteFragment();
+    //  Rename and change types and number of parameters
+    public static DetailFragment newInstance(String param1, String param2) {
+        DetailFragment fragment = new DetailFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -84,34 +74,53 @@ public class AddNoteFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        NotesDbHelper notesDbHelper = new NotesDbHelper(getContext());
-
-        ((MainActivity)getActivity()).resetBar(true);
-         notesDb = notesDbHelper.getWritableDatabase();
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        NotesDbHelper notesDbHelper = new NotesDbHelper(getContext());
+
+
+        notesDb = notesDbHelper.getWritableDatabase();
+
+        Bundle myArgs = getArguments();
+
+       Notetoedit =  myArgs.getString("note_");
+
+       id_of_note = myArgs.getInt("id_") + 1;
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view=
         // Inflate the layout for this fragment
-       view =  inflater.inflate(R.layout.fragment_add_note, container, false);
+        inflater.inflate(R.layout.fragment_detail, container, false);
 
+        editor_to_update = (EditText)view.findViewById(R.id.editor_to_uptdate);
 
+        editor_to_update.requestFocus();
 
-        notes = (EditText)view.findViewById(R.id.typingfield);
-
-        notes.requestFocus();
+        editor_to_update.setText(Notetoedit);
 
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        editor_to_update.setText("");
+    }
+
+
+
+
+
+
+    //  Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -146,53 +155,44 @@ public class AddNoteFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+        //  Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-//This function will save any new entry
-    public  void addNewNote() {
+
+    public void updateNote(){
+
+        if (editor_to_update.getText().length() == 0 ||
+                editor_to_update.getText().length() == 0) {
+
+/*
+Omit this entry if the user intentionally deletes all the content of the note
+ */
+            Toast.makeText(getContext(), "Note Removed!", Toast.LENGTH_SHORT).show();
 
 
-        if (notes.getText().length() == 0 ||
-                notes.getText().length() == 0) {
-            Toast.makeText(getContext(), "Note is Empty!", Toast.LENGTH_SHORT).show();
-
-            return;
+            notesDb.delete(Definitions.NoteslistEntry.TABLE_NAME,"_id = ?",new String[]{String.valueOf(id_of_note)});
 
         }else {
 
+            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
 
-        prepareEntry(notes.getText().toString());
+            ContentValues cv = new ContentValues();
 
+        /*
+        Getting the updated note by the user
+         */
+
+            cv.put(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT,editor_to_update.getText().toString() );
+
+            cv.put(Definitions.NoteslistEntry.COLUMN_NOTE_EDIT_DATE,date);
+
+            notesDb.update(Definitions.NoteslistEntry.TABLE_NAME, cv, "_id = ?", new String[]{String.valueOf(id_of_note)});
+
+
+            Toast.makeText(getContext(), "Note Updated!", Toast.LENGTH_SHORT).show();
+
+        }
     }
-
-
-}
-
-//    private String getDateTime() {
-//        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-//        Date date = new Date();
-//        return dateFormat.format(date);
-//    }
-
-public long prepareEntry(String nt){
-
-    String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-
-
-    ContentValues cv = new ContentValues();
-
-    cv.put(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT,nt);
-
-
-    cv.put(Definitions.NoteslistEntry.COLUMN_NOTE_EDIT_DATE,date);
-Toast.makeText(getContext(),"Note Saved",Toast.LENGTH_LONG).show();
-    return notesDb.insert(Definitions.NoteslistEntry.TABLE_NAME, null, cv);
-
-}
-
-
-
 }
