@@ -143,15 +143,17 @@ holder.lastedited.setText(mCursor.getString(mCursor.getColumnIndex(Definitions.N
                 public void onClick(View v) {
 
 
-
+mCursor.moveToPosition(getLayoutPosition());
                     if (mNoteClickListener != null) {
                         final int note_id =  getAdapterPosition();
+
+
 
                          mCursor.moveToPosition(getLayoutPosition());
 
 
 
-                        mNoteClickListener.onNoteClicked(note_id,mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT)));
+                        mNoteClickListener.onNoteClicked(mCursor.getInt(mCursor.getColumnIndex(Definitions.NoteslistEntry._ID)),mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT)));
 
 
                     }

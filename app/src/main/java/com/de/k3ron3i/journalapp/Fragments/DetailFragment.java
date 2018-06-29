@@ -88,7 +88,7 @@ public class DetailFragment extends Fragment {
 
        Notetoedit =  myArgs.getString("note_");
 
-       id_of_note = myArgs.getInt("id_") + 1;
+       id_of_note = myArgs.getInt("id_");
 
 
     }
@@ -98,9 +98,9 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view=
         // Inflate the layout for this fragment
-        inflater.inflate(R.layout.fragment_detail, container, false);
+        inflater.inflate(R.layout.fragment_detail_edit, container, false);
 
-        editor_to_update = (EditText)view.findViewById(R.id.editor_to_uptdate);
+        editor_to_update = (EditText)view.findViewById(R.id.editor_to_update);
 
         editor_to_update.requestFocus();
 
