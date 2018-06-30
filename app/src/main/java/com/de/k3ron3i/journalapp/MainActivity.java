@@ -230,10 +230,12 @@ Arrow = (ImageView)findViewById(R.id.arrow);
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
             if(fragment.getTag()=="create") {
                 saveChanges();
-            }else
+            }else if(fragment.getTag()=="detail")
                 {
-updateChanges();
-                }
+                  updateChanges();
+                }else {
+                Toast.makeText(getApplicationContext(),"Configuring your Backups",Toast.LENGTH_LONG).show();
+            }
 
               whatsVisible(false);
               //actionBar.setDisplayHomeAsUpEnabled(false);
@@ -262,6 +264,10 @@ public void openEditor(){
 
     public void openSignIn(){
         whatsVisible(true);
+
+        actionBar.setTitle("My Account");
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         // ((LinearLayout)findViewById(R.id.fragment_container)).removeAllViews();
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new SignInFragment(),"signIn").commit();
 
