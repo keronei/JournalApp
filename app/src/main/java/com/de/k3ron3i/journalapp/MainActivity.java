@@ -2,6 +2,7 @@ package com.de.k3ron3i.journalapp;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -29,9 +30,15 @@ import com.de.k3ron3i.journalapp.DbHelper.Definitions;
 import com.de.k3ron3i.journalapp.DbHelper.NotesDbHelper;
 import com.de.k3ron3i.journalapp.Fragments.AddNoteFragment;
 import com.de.k3ron3i.journalapp.Fragments.DetailFragment;
+import com.de.k3ron3i.journalapp.Fragments.SignInFragment;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements AddNoteFragment.OnFragmentInteractionListener,DetailFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements AddNoteFragment.OnFragmentInteractionListener,
+        SignInFragment.OnFragmentInteractionListener,DetailFragment.OnFragmentInteractionListener {
 
     //initializing items to be used
     EditText NotesContent;
@@ -49,11 +56,28 @@ public class MainActivity extends AppCompatActivity implements AddNoteFragment.O
     ImageView Arrow;
 
 
+    private FirebaseAuth OAuth;
 
     RecyclerView recyclerView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+OAuth = FirebaseAuth.getInstance();
+
+
+
+        FirebaseUser firebaseUser = OAuth.getCurrentUser();
+
+        if(firebaseUser ==null)
+        {
+
+//openSignIn();
+
+
+        }
+
+
+
         setContentView(R.layout.activity_main);
       toolbar = (Toolbar) findViewById(R.id.toolbar);
        setSupportActionBar(toolbar);
@@ -196,6 +220,9 @@ Arrow = (ImageView)findViewById(R.id.arrow);
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            openSignIn();
+
                        return true;
                                         }
 
@@ -232,6 +259,13 @@ public void openEditor(){
  getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new AddNoteFragment(),"create").commit();
 
 }
+
+    public void openSignIn(){
+        whatsVisible(true);
+        // ((LinearLayout)findViewById(R.id.fragment_container)).removeAllViews();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_container,new SignInFragment(),"signIn").commit();
+
+    }
 
 
 
@@ -314,6 +348,11 @@ public void saveChanges(){
 
 }
 
+public void signIn(){
+    whatsVisible(true);
+    actionBar.setTitle("Sign In");
+    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, new SignInFragment(),"signIn").commit();
+}
 
     public void updateChanges(){
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
