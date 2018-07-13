@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +42,7 @@ public class DetailFragment extends Fragment {
 
     String Notetoedit;
 
-    int id_of_note;
+    String id_of_note;
 
 
     EditText editor_to_update;
@@ -86,9 +85,9 @@ public class DetailFragment extends Fragment {
 
         Bundle myArgs = getArguments();
 
-       Notetoedit =  myArgs.getString("note_");
+        Notetoedit = myArgs.getString("note_");
 
-       id_of_note = myArgs.getInt("id_");
+        id_of_note = myArgs.getString("id_");
 
 
     }
@@ -97,8 +96,8 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view=
-        // Inflate the layout for this fragment
-        inflater.inflate(R.layout.fragment_detail_edit, container, false);
+                // Inflate the layout for this fragment
+                inflater.inflate(R.layout.fragment_detail_edit, container, false);
 
         editor_to_update = (EditText)view.findViewById(R.id.editor_to_update);
 
@@ -171,7 +170,7 @@ Omit this entry if the user intentionally deletes all the content of the note
             Toast.makeText(getContext(), "Note Removed!", Toast.LENGTH_SHORT).show();
 
 
-            notesDb.delete(Definitions.NoteslistEntry.TABLE_NAME,"_id = ?",new String[]{String.valueOf(id_of_note)});
+            notesDb.delete(Definitions.NoteslistEntry.TABLE_NAME, "_id = ?", new String[]{id_of_note});
 
         }else {
 

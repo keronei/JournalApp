@@ -2,14 +2,16 @@ package com.de.k3ron3i.journalapp;
 
 
 import android.content.Context;
-import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.de.k3ron3i.journalapp.DbHelper.Definitions;
+import com.de.k3ron3i.journalapp.Pojo.NotesPojo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.GuestViewHolder> {
@@ -18,7 +20,9 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Gues
 
     private Context mContext;
     // Initialize the cursor to point the data
-    private Cursor mCursor;
+    private List<NotesPojo> pojolist;
+
+    private NotesPojo AtStack;
 
 
     /**
@@ -26,17 +30,17 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Gues
      * @param context the calling context/activity
      */
     // Accepting cursor as input
-    public NotesListAdapter( Context context, Cursor cursor) {
+    public NotesListAdapter(Context context, List<NotesPojo> list) {
         this.mContext = context;
 
-        this.mCursor = cursor;
+        this.pojolist = list;
 
 
 
     }
 
     public interface OnNoteClickedListener {
-        void onNoteClicked(int note,String notecontent);
+        void onNoteClicked(String note, String notecontent);
     }
 
 
@@ -59,34 +63,19 @@ public class NotesListAdapter extends RecyclerView.Adapter<NotesListAdapter.Gues
     @Override
     public void onBindViewHolder(GuestViewHolder holder, int position) {
 
-
-        //  Move the cursor to the passed in position, return if moveToPosition returns false
-
-if(!(mCursor.moveToPosition(position)))
-   // Toast.makeText(mContext, "Cursor is probably null", Toast.LENGTH_SHORT).show();
-    return;
+        AtStack = pojolist.get(position);
 
 
+        String Notecontent = AtStack.getmNotes();
+
+        String id = AtStack.getrID();
+
+        holder.foundnote.setText(Notecontent);
+
+        holder.itemView.setTag(id);
 
 
-
-        String Notecontent = mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT));
-        /*
-
-            Call getInt on the cursor to get the party size
-            int partySize = mCursor.getInt(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_HEAD));
-            Set the holder's nameTextView text to the guest's name
-
-          */
-        long id = mCursor.getLong(mCursor.getColumnIndex(Definitions.NoteslistEntry._ID));
-holder.foundnote.setText(Notecontent);
-
-holder.itemView.setTag(id);
-
-
-
-
-holder.lastedited.setText(mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_EDIT_DATE)));
+        holder.lastedited.setText(AtStack.getmNoteLastEdit());
 
 
 
@@ -95,20 +84,22 @@ holder.lastedited.setText(mCursor.getString(mCursor.getColumnIndex(Definitions.N
     @Override
     public int getItemCount() {
         //Getting the total count of the items
-        return mCursor.getCount();
+        return (pojolist == null) ? 0 : pojolist.size();
     }
-//recheck cursor content using this function.
 
-    public void swapCursor(Cursor newCursor) {
 
-        if (mCursor != null) mCursor.close();
+/*
+ always refresh the list incase of deletion or addition.
+  */
 
-        mCursor = newCursor;
+    public void RefreshList(List<NotesPojo> newcontent) {
 
-        if (newCursor != null) {
+        pojolist = new ArrayList<>();
 
-            this.notifyDataSetChanged();
-        }
+        pojolist.addAll(newcontent);
+
+        notifyDataSetChanged();
+
     }
 
 
@@ -143,17 +134,13 @@ holder.lastedited.setText(mCursor.getString(mCursor.getColumnIndex(Definitions.N
                 public void onClick(View v) {
 
 
-mCursor.moveToPosition(getLayoutPosition());
                     if (mNoteClickListener != null) {
-                        final int note_id =  getAdapterPosition();
 
 
-
-                         mCursor.moveToPosition(getLayoutPosition());
-
+                        AtStack = pojolist.get(getAdapterPosition());
 
 
-                        mNoteClickListener.onNoteClicked(mCursor.getInt(mCursor.getColumnIndex(Definitions.NoteslistEntry._ID)),mCursor.getString(mCursor.getColumnIndex(Definitions.NoteslistEntry.COLUMN_NOTE_CONTENT)));
+                        mNoteClickListener.onNoteClicked(AtStack.getrID(), AtStack.getmNotes());
 
 
                     }

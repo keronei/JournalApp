@@ -5,7 +5,7 @@
 android:paddingTop="10dp"
     android:paddingBottom="10dp"
     android:orientation="horizontal"
-    android:weightSum="1.5"
+    android:weightSum="1.3"
     >
 
 
